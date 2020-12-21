@@ -12,6 +12,17 @@ log = logging.getLogger(__name__)
 
 
 def loadXML(infile):
+    """Tries to parse the given xml file
+
+    Args:
+        infile (path): The location of the xml file
+
+    Raises:
+        SystemExit: When item could not parsed
+
+    Returns:
+        etree: The parsed xml file
+    """
     try:
         tree = ET.parse(infile)
         return tree.getroot()
@@ -21,6 +32,14 @@ def loadXML(infile):
 
 
 def find_duplicates(xmlfile):
+    """Find the dupes in the xml
+
+    Args:
+        xmlfile (etree): The parsed jobfile
+
+    Returns:
+        list: The list with duplicated etree items
+    """
     namelist = []
     dupelist = []
     for item in xmlfile.findall(".//Item"):
@@ -35,6 +54,13 @@ def find_duplicates(xmlfile):
 
 
 def write_joblist(xmlfile, floc, dupes):
+    """Writes out the joblist
+
+    Args:
+        xmlfile (etree): The original joblist
+        floc (Path): The original file location
+        dupes (list): The dupelist with etree elements
+    """
     for dupe in dupes:
         xmlfile.remove(dupe)
     save_path = Path(str(floc).replace(".xml", "_clean.xml"))
